@@ -79,6 +79,13 @@ function createUrl(colId, itemId, name) {
         case '3': {
             return `https://www.myheritage.com/member-${itemId}_1/${name}`;
         }
+        case '40001': {
+            // Family Search
+            const ix = name.lastIndexOf(' ');
+            const firstName = name.substring(0, ix);
+            const lastName = name.substring(ix + 1);
+            return `https://www.familysearch.org/tree/find/name?self=${firstName}|${lastName}|1|1`;
+        }
     }
     return null;
 }
