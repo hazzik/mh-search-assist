@@ -76,11 +76,15 @@ function createUrl(colId, itemId, name, container) {
     switch (colId) {
         case '1': {
             const [_, siteId, familyTreeId, individualId] = itemId.match(/(\d+)-(\d+)-(\d+)/);
-            const nameSlug = name.replace(/\W+/gu,'-').toLowerCase();
+            const nameSlug = name.toLowerCase().replace(/\W+/gu,'-');
             return `https://www.myheritage.com/person-${(parseInt(familyTreeId) * 1000000 + parseInt(individualId))}_${siteId}_${siteId}/${nameSlug}`;
         }
+        case '2': {
+            const nameSlug = name.toLowerCase().replace(/\W+/gu,'-').replace(/-web-site$/,'');
+            return `https://www.myheritage.com/site-${itemId}/${nameSlug}`;
+        }
         case '3': {
-            const nameSlug = name.replace(/\W+/gu,'-').toLowerCase();
+            const nameSlug = name.toLowerCase().replace(/\W+/gu,'-');
             return `https://www.myheritage.com/member-${itemId}_1/${nameSlug}`;
         }
         case '40001': {
@@ -107,25 +111,8 @@ function createUrl(colId, itemId, name, container) {
     return null;
 }
 
-const contatiner1 = document.querySelector('.record_matches_results_list_container');
-if (contatiner1) {
-    new MutationObserver(debounce(processLinks, 100)).observe(contatiner1, { 
-        childList: true, subtree: true
-    });
-}
-
-const contatiner2 = document.querySelector('.result_list_container');
-if (contatiner2) {
-    new MutationObserver(debounce(processLinks, 100)).observe(contatiner2, { 
-        childList: true, subtree: true
-    });
-}
-
-const contatiner3 = document.querySelector('.results_container');
-if (contatiner3) {
-    new MutationObserver(debounce(processLinks, 100)).observe(contatiner3, { 
-        childList: true, subtree: true
-    });
-}
+new MutationObserver(debounce(processLinks, 100)).observe(document, {
+    childList: true, subtree: true
+});
 
 processLinks();
