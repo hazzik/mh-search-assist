@@ -23,4 +23,7 @@ describe("parseEvent", () => {
     it ("should parse name with abbreviations", () => {
         deepEqual(parseName("J. Smith"), { firstName: "J.", lastName: "Smith", birthName: undefined });
     });
+    it ("should not fail on empty", () => {
+        deepEqual(parseName(""), { firstName: undefined, lastName: undefined, birthName: undefined });
+    });
 });
