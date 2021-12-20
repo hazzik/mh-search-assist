@@ -1,5 +1,6 @@
 
 import debounce from "debounce";
+import { parseEvent } from "./parseEvent.js";
 
 function processLinks () {
     document.querySelectorAll('.recordContainer').forEach(container => {
@@ -85,13 +86,13 @@ function createUrl(colId, itemId, name, container) {
             const params = new URLSearchParams(`self=${firstName}|${lastName}|1|1`);
             const birth = extractFromTable(container, 'Birth');
             if (birth) {
-                const [_, year, place ] = /(?:\w+\s+)?(\d+)(?:\s+-\s+(.*))?/.exec(birth);
-                params.append('birth', `${ place && place !== 'Place' ? place : '' }|${year || ''}|1|1`);
+                const [date, place] = parseEvent(birth);
+                params.append('birth', `${ place }|${ date }|1|1`);
             }
             const death = extractFromTable(container, 'Death');
             if (death) {
-                const [_, year, place ] = /(?:\w+\s+)?(\d+)(?:\s+-\s+(.*))?/.exec(death);
-                params.append('death', `${ place && place !== 'Place' ? place : '' }|${year || ''}|1|1`);
+                const [date, place] = parseEvent(death);
+                params.append('death', `${ place }|${ date }|1|1`);
             }
 
             return `https://www.familysearch.org/tree/find/name?${params}`;
@@ -105,3 +106,7 @@ new MutationObserver(debounce(processLinks, 100)).observe(document, {
 });
 
 processLinks();
+function parseLocationString(birth) {
+    return /(?:\w+\s+)?(\d+)(?:\s+-\s+(.*))?/.exec(birth);
+}
+
