@@ -67,15 +67,15 @@ function createUrl(colId, itemId, name, container) {
         case '1': {
             const [_, siteId, familyTreeId, individualId] = itemId.match(/(\d+)-(\d+)-(\d+)/);
             const nameSlug = name.toLowerCase().replace(/\W+/gu,'-');
-            return `https://www.myheritage.com/person-${(parseInt(familyTreeId) * 1000000 + parseInt(individualId))}_${siteId}_${siteId}/${nameSlug}`;
+            return `/person-${(parseInt(familyTreeId) * 1000000 + parseInt(individualId))}_${siteId}_${siteId}/${nameSlug}`;
         }
         case '2': {
             const nameSlug = name.toLowerCase().replace(/\W+/gu,'-').replace(/-web-site$/,'');
-            return `https://www.myheritage.com/site-${itemId}/${nameSlug}`;
+            return `/site-${itemId}/${nameSlug}`;
         }
         case '3': {
             const nameSlug = name.toLowerCase().replace(/\W+/gu,'-');
-            return `https://www.myheritage.com/member-${itemId}_1/${nameSlug}`;
+            return `/member-${itemId}_1/${nameSlug}`;
         }
         case '40001': {
             // Family Search
@@ -106,7 +106,3 @@ new MutationObserver(debounce(processLinks, 100)).observe(document, {
 });
 
 processLinks();
-function parseLocationString(birth) {
-    return /(?:\w+\s+)?(\d+)(?:\s+-\s+(.*))?/.exec(birth);
-}
-
