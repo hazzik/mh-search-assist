@@ -20,4 +20,7 @@ describe("parseEvent", () => {
     it ("should parse only last name with birth name", () => {
         deepEqual(parseName("Smith (Doe)"), { firstName: undefined, lastName: "Smith", birthName: "Doe" });
     });
+    it ("should parse name with abbreviations", () => {
+        deepEqual(parseName("J. Smith"), { firstName: "J.", lastName: "Smith", birthName: undefined });
+    });
 });
