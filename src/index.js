@@ -93,12 +93,12 @@ function createUrl(colId, itemId, name, container) {
             const birth = extractFromTable(container, 'Birth');
             if (birth) {
                 const [_, year, place ] = /(?:\w+\s+)?(\d+)(?:\s+-\s+(.*))?/.exec(birth);
-                params.append('birth', `${ place && place !== 'Place' ? place : '' }|${year || ''}|0|1`);
+                params.append('birth', `${ place && place !== 'Place' ? place : '' }|${year || ''}|1|1`);
             }
             const death = extractFromTable(container, 'Death');
             if (death) {
                 const [_, year, place ] = /(?:\w+\s+)?(\d+)(?:\s+-\s+(.*))?/.exec(death);
-                params.append('death', `${ place && place !== 'Place' ? place : '' }|${year || ''}|0|1`);
+                params.append('death', `${ place && place !== 'Place' ? place : '' }|${year || ''}|1|1`);
             }
 
             return `https://www.familysearch.org/tree/find/name?${params}`;
