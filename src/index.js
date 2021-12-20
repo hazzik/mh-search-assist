@@ -1,6 +1,8 @@
 
 import debounce from "debounce";
 import { parseEvent } from "./parseEvent.js";
+import { parseName } from "./parseName.js";
+import { slug } from "./slug.js";
 
 function processLinks () {
     document.querySelectorAll('.recordContainer').forEach(container => {
@@ -66,24 +68,18 @@ function createUrl(colId, itemId, name, container) {
     switch (colId) {
         case '1': {
             const [_, siteId, familyTreeId, individualId] = itemId.match(/(\d+)-(\d+)-(\d+)/);
-            const nameSlug = name.toLowerCase().replace(/\W+/gu,'-');
-            return `/person-${(parseInt(familyTreeId) * 1000000 + parseInt(individualId))}_${siteId}_${siteId}/${nameSlug}`;
+            return `/person-${(parseInt(familyTreeId) * 1000000 + parseInt(individualId))}_${siteId}_${siteId}/${slug(name)}`;
         }
         case '2': {
-            const nameSlug = name.toLowerCase().replace(/\W+/gu,'-').replace(/-web-site$/,'');
-            return `/site-${itemId}/${nameSlug}`;
+            return `/site-${itemId}/${slug(name)}`;
         }
         case '3': {
-            const nameSlug = name.toLowerCase().replace(/\W+/gu,'-');
-            return `/member-${itemId}_1/${nameSlug}`;
+            return `/member-${itemId}_1/${slug(name)}`;
         }
         case '40001': {
             // Family Search
-            const [_, fullName, birthName] = /\s*([\w\s]+)(?:\(\w+ (\w+)\))?\s*/.exec(name);
-            const ix = fullName.trim().lastIndexOf(' ');
-            const firstName = fullName.substring(0, ix);
-            const lastName = birthName || fullName.substring(ix + 1);
-            const params = new URLSearchParams(`self=${firstName}|${lastName}|1|1`);
+            const { firstName, lastName, birthName } = parseName(name);
+            const params = new URLSearchParams(`self=${firstName}|${birthName || lastName}|1|1`);
             const birth = extractFromTable(container, 'Birth');
             if (birth) {
                 const [date, place] = parseEvent(birth);
