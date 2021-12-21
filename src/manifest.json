@@ -89,7 +89,7 @@
   "web_accessible_resources": ["images/unlocked.png"],
   "browser_specific_settings": {
     "gecko": {
-      "update_url": "https://hazzik.github.io/mh-search-assist/update.json"
+      "update_url": "https://github.com/hazzik/mh-search-assist/releases/latest/download/update.json"
     }
   }
 }

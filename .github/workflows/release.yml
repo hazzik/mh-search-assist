@@ -20,6 +20,7 @@ jobs:
         npm ci
         npm test
         npm run build
+        npm run pack
 
     - name: Sign
       run: |
@@ -29,19 +30,16 @@ jobs:
         AMO_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
         AMO_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
         AMO_EXTENSION_ID: ${{ secrets.AMO_EXTENSION_ID }}
-
-    - uses: actions/checkout@v2
+ 
+    - name: Create Release
+      uses: meeDamian/github-release@2.0
       with:
-        ref: gh-pages
-        clean: false
-    
-    - name: Push
-      run: |
-        mv -f update.json.tmp update.json
-        git config user.email "hazzik@users.noreply.github.com"
-        git config user.name "Alex Zaytsev"
-        git add -A
-        git commit -m "Release ${{ github.ref }}"
-        git push origin gh-pages
-
-    
+        title: "Release ${{ github.ref }}"
+        tag: ${{ github.ref }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        gzip: false
+        files: >
+          mh-search-assist.zip:web-ext-artifacts/*.zip
+          mh-search-assist.xpi:web-ext-artifacts/*.xpi
+          update.json:web-ext-artifacts/update.json
+          LICENSE.txt:LICENSE
