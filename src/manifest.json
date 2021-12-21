@@ -86,5 +86,10 @@
       ]
     }
   ],
-  "web_accessible_resources": ["images/unlocked.png"]
+  "web_accessible_resources": ["images/unlocked.png"],
+  "browser_specific_settings": {
+    "gecko": {
+      "update_url": "https://hazzik.github.io/mh-search-assist/update.json"
+    }
+  }
 }

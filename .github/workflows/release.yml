@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    tags: [ "v*" ]
+
+jobs:
+  release:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: 16.x
+
+    - name: Build
+      run: |
+        npm ci
+        npm test
+        npm run build
+
+    - name: Sign
+      run: |
+        npm run sign
+        npm run generate-update-manifest
+      env:
+        AMO_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
+        AMO_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+        AMO_EXTENSION_ID: ${{ secrets.AMO_EXTENSION_ID }}
+
+    - uses: actions/checkout@v2
+      with:
+        ref: gh-pages
+        clean: false
+    
+    - name: Push
+      run: |
+        mv -f update.json.tmp update.json
+        git config user.email "hazzik@users.noreply.github.com"
+        git config user.name "Alex Zaytsev"
+        git add -A
+        git commit -m "Release ${{ github.ref }}"
+        git push origin gh-pages
+
+    
