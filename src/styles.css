@@ -8,3 +8,14 @@
     background-size: 20px 18px;
     margin: -3px 0px;
 }
+
+.recordTitleContainer .record_link.external:before,
+.record_title .record_name.external:before{
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 18px;
+    background: url(images/external.png) no-repeat;
+    background-size: 20px 18px;
+    margin: -3px 0px;
+}

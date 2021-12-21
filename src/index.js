@@ -15,7 +15,7 @@ function processLinks () {
         const url = createUrl(colId, itemId, name, container);
         if (!url) return;
         container.querySelectorAll('a.record_link').forEach(a => {
-            a.classList.add('unlocked');
+            a.classList.add(url.startsWith('/') ? 'unlocked' : 'external');
             a.setAttribute('href', url);
         });
     });
@@ -30,7 +30,7 @@ function processLinks () {
         const url = createUrl(colId, itemId, name, container);
         if (!url) return;
         container.querySelectorAll('a.record_name').forEach(a => {
-            a.classList.add('unlocked');
+            a.classList.add(url.startsWith('/') ? 'unlocked' : 'external');
             a.setAttribute('href', url);
         });
         container.onclick = (e) => {
