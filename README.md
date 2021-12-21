@@ -15,6 +15,6 @@ Modifies links in the search results to point directly to the found items. Links
 4. Enable Developer Mode.
 5. Drag the `mh-search-assist` folder anywhere on the page to import it (do not delete the folder afterwards).
 
-#### Mozilla Firefox
+### Mozilla Firefox
 * [Download and install the latest version](https://github.com/hazzik/mh-search-assist/releases/latest/download/mh-search-assist.xpi)
 
