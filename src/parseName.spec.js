@@ -26,4 +26,7 @@ describe("parseEvent", () => {
     it ("should not fail on empty", () => {
         deepEqual(parseName(""), { firstName: undefined, lastName: undefined, birthName: undefined });
     });
+    it ("should parse name with quotes", () => {
+        deepEqual(parseName("John \"J\" Smith"), { firstName: "John \"J\"", lastName: "Smith", birthName: undefined });
+    });
 });
