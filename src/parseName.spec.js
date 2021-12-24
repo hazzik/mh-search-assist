@@ -29,4 +29,10 @@ describe("parseEvent", () => {
     it ("should parse name with quotes", () => {
         deepEqual(parseName("John \"J\" Smith"), { firstName: "John \"J\"", lastName: "Smith", birthName: undefined });
     });
+    it ("should parse name with cyrilic", () => {
+        deepEqual(parseName("Василий Пупкин"), { firstName: "Василий", lastName: "Пупкин", birthName: undefined });
+    });
+    it ("should parse name with cyrilic yo", () => {
+        deepEqual(parseName("Фёдор Конюхов"), { firstName: "Фёдор", lastName: "Конюхов", birthName: undefined });
+    });
 });
