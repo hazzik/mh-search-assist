@@ -67,7 +67,7 @@ function extractFromTable(container, field) {
 function createUrl(colId, itemId, name, container) {
     switch (colId) {
         case '1': {
-            const [_, siteId, familyTreeId, individualId] = itemId.match(/(\d+)-(\d+)-(\d+)/);
+            const [, siteId, familyTreeId, individualId] = itemId.match(/(\d+)-(\d+)-(\d+)/);
             return `/person-${(parseInt(familyTreeId) * 1000000 + parseInt(individualId))}_${siteId}_${siteId}/${slug(name)}`;
         }
         case '2': {

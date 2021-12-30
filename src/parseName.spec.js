@@ -35,4 +35,7 @@ describe("parseEvent", () => {
     it ("should parse name with cyrilic yo", () => {
         deepEqual(parseName("Фёдор Конюхов"), { firstName: "Фёдор", lastName: "Конюхов", birthName: undefined });
     });
+    it ("should ignore translated part", () => {
+        deepEqual(parseName("John Doe [Джон Дое]"), { firstName: "John", lastName: "Doe", birthName: undefined });
+    });
 });
