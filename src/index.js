@@ -79,7 +79,10 @@ function createUrl(colId, itemId, name, container) {
         case '40000':{
             // Geni
             const { firstName, lastName, birthName } = parseName(name);
-            const params = new URLSearchParams(`?search_advanced=open&names=${firstName} ${lastName} ${birthName}`);
+            if (!firstName && !lastName && !birthName) {
+                return null;
+            }
+            const params = new URLSearchParams(`?search_advanced=open&names=${[firstName, lastName, birthName].join(" ")}`);
             const birth = extractFromTable(container, 'Birth');
             if (birth) {
                 const [date, place] = parseEvent(birth);
@@ -101,7 +104,10 @@ function createUrl(colId, itemId, name, container) {
         case '40001': {
             // Family Search
             const { firstName, lastName, birthName } = parseName(name);
-            const params = new URLSearchParams(`self=${firstName}|${birthName || lastName}|1|1`);
+            if (!firstName && !lastName && !birthName) {
+                return null;
+            }
+            const params = new URLSearchParams(`self=${[firstName]}|${[birthName || lastName]}|1|1`);
             const birth = extractFromTable(container, 'Birth');
             if (birth) {
                 const [date, place] = parseEvent(birth);
