@@ -76,6 +76,28 @@ function createUrl(colId, itemId, name, container) {
         case '3': {
             return `/member-${itemId}_1/${slug(name)}`;
         }
+        case '40000':{
+            // Geni
+            const { firstName, lastName, birthName } = parseName(name);
+            const params = new URLSearchParams(`?search_advanced=open&names=${firstName} ${lastName} ${birthName}`);
+            const birth = extractFromTable(container, 'Birth');
+            if (birth) {
+                const [date, place] = parseEvent(birth);
+                params.append('birth[year]', date);
+                params.append('birth[location]', place);
+            }
+            const death = extractFromTable(container, 'Death');
+            if (death) {
+                params.append('death[year]', date);
+                params.append('death[location]', place);
+            }
+            
+            if (birth || death) {
+                params.append('search_advanced', 'open');
+            }
+
+            return `https://www.geni.com/search?${params}`;
+        }
         case '40001': {
             // Family Search
             const { firstName, lastName, birthName } = parseName(name);
