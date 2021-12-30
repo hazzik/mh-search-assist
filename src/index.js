@@ -7,6 +7,7 @@ import { slug } from "./slug.js";
 function processLinks () {
     document.querySelectorAll('.recordContainer').forEach(container => {
         const link = container.querySelector('a.recordTitle');
+        if (!link) { return; }
         const name = link.textContent.trim();
         const params = getParameters(container, link);
         if (!params) return;
@@ -22,6 +23,7 @@ function processLinks () {
 
     document.querySelectorAll('.records_list_item').forEach(container => {
         const link = container.querySelector('.record_title a.record_name');
+        if (!link) { return; }
         const name = link.textContent.trim();
         const params = getParameters(container, link);
         if (!params) return;
