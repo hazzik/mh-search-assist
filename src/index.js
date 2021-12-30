@@ -91,6 +91,7 @@ function createUrl(colId, itemId, name, container) {
             }
             const death = extractFromTable(container, 'Death');
             if (death) {
+                const [date, place] = parseEvent(death);
                 params.append('death[year]', date);
                 params.append('death[location]', place);
             }
