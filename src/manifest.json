@@ -82,13 +82,9 @@
         "main.js"
       ],
       "css": [
-        "styles.css"
+        "main.css"
       ]
     }
-  ],
-  "web_accessible_resources": [
-    "images/unlocked.png",
-    "images/external.png"
   ],
   "browser_specific_settings": {
     "gecko": {
