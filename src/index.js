@@ -110,19 +110,32 @@ function createUrl(colId, itemId, name, container) {
             if (!firstName && !lastName && !birthName) {
                 return null;
             }
-            const params = new URLSearchParams(`self=${[firstName]}|${[birthName || lastName]}|1|1`);
+            const params = new URLSearchParams();
+            if (firstName) {
+                params.append('q.givenName', firstName);
+            }
+            const surname = birthName || lastName;
+            if (surname) {
+                params.append('q.surname', surname);
+            }
+            
+            params.append('q.surname', [birthName || lastName])
             const birth = extractFromTable(container, 'Birth');
             if (birth) {
                 const [date, place] = parseEvent(birth);
-                params.append('birth', `${ place }|${ date }|1|1`);
+                params.append('q.birthLikeDate.from', date);
+                params.append('q.birthLikeDate.to', date);
+                params.append('q.birthLikePlace', place);
             }
             const death = extractFromTable(container, 'Death');
             if (death) {
                 const [date, place] = parseEvent(death);
-                params.append('death', `${ place }|${ date }|1|1`);
+                params.append('q.deathLikeDate.from', date);
+                params.append('q.deathLikeDate.to', date);
+                params.append('q.deathLikePlace', place);
             }
 
-            return `https://www.familysearch.org/tree/find/name?${params}`;
+            return `https://www.familysearch.org/search/tree/results?${params}`;
         }
     }
     return null;
