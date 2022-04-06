@@ -118,20 +118,21 @@ function createUrl(colId, itemId, name, container) {
             if (surname) {
                 params.append('q.surname', surname);
             }
-            
-            params.append('q.surname', [birthName || lastName])
+
             const birth = extractFromTable(container, 'Birth');
             if (birth) {
                 const [date, place] = parseEvent(birth);
-                params.append('q.birthLikeDate.from', date);
-                params.append('q.birthLikeDate.to', date);
+                const [year] = /\d{4}/.exec(date);
+                params.append('q.birthLikeDate.from', year);
+                params.append('q.birthLikeDate.to', year);
                 params.append('q.birthLikePlace', place);
             }
             const death = extractFromTable(container, 'Death');
             if (death) {
                 const [date, place] = parseEvent(death);
-                params.append('q.deathLikeDate.from', date);
-                params.append('q.deathLikeDate.to', date);
+                const [year] = /\d{4}/.exec(date);
+                params.append('q.deathLikeDate.from', year);
+                params.append('q.deathLikeDate.to', year);
                 params.append('q.deathLikePlace', place);
             }
 
