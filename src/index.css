@@ -1,5 +1,5 @@
 .recordTitleContainer .record_link.unlocked:before,
-.record_title .record_name.unlocked:before{
+.record_title .record_name.unlocked .record_name_text:before{
     content: "";
     display: inline-block;
     width: 20px;
@@ -10,7 +10,7 @@
 }
 
 .recordTitleContainer .record_link.external:before,
-.record_title .record_name.external:before{
+.record_title .record_name.external .record_name_text:before{
     content: "";
     display: inline-block;
     width: 20px;
