@@ -6,6 +6,10 @@ on:
 
 jobs:
   release:
+    env:
+      AMO_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
+      AMO_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+      AMO_EXTENSION_ID: ${{ secrets.AMO_EXTENSION_ID }}
 
     runs-on: ubuntu-latest
 
@@ -26,10 +30,6 @@ jobs:
       run: |
         npm run sign
         npm run generate-update-manifest
-      env:
-        AMO_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
-        AMO_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
-        AMO_EXTENSION_ID: ${{ secrets.AMO_EXTENSION_ID }}
  
     - name: Create Release
       uses: meeDamian/github-release@2.0

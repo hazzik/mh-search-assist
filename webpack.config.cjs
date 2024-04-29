@@ -3,7 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const package = require('./package.json');
 
-module.exports = {
+module.exports = (env) => ({
 	devtool: 'source-map',
 	mode: 'production',
 	entry: {
@@ -21,6 +21,15 @@ module.exports = {
 					transform(content) {
 						const manifest = JSON.parse(content.toString());
 						manifest.version = package.version;
+						if (env.AMO_EXTENSION_ID) {
+							manifest.browser_specific_settings = {
+								...manifest.browser_specific_settings,
+								gecko: { 
+									...manifest.browser_specific_settings.gecko,
+									id: env.AMO_EXTENSION_ID.trim()
+								}
+							};
+						}
 						return JSON.stringify(manifest);
 					}
 				}
@@ -44,4 +53,4 @@ module.exports = {
 			new CssMinimizerPlugin(),
 		],
 	},
-};
+});

@@ -1,14 +1,14 @@
 {
   "name": "mh-search-assist",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "description": "A productivity extension for MH",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --env AMO_EXTENSION_ID=\"$AMO_EXTENSION_ID\"",
     "pack": "web-ext build --source-dir ./dist/",
     "start:firefox": "web-ext run --source-dir ./dist/",
-    "sign": "web-ext sign --source-dir ./dist/ --api-key $AMO_API_KEY --api-secret $AMO_API_SECRET --id $AMO_EXTENSION_ID",
+    "sign": "web-ext sign --use-submission-api --channel unlisted --source-dir ./dist/ --api-key $AMO_API_KEY --api-secret $AMO_API_SECRET",
     "generate-update-manifest": "node bin/generate-update-manifest.js $AMO_EXTENSION_ID",
     "test": "mocha 'src/**/*.spec.js'"
   },
