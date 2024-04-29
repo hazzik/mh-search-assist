@@ -26,7 +26,7 @@ module.exports = (env) => ({
 								...manifest.browser_specific_settings,
 								gecko: { 
 									...manifest.browser_specific_settings.gecko,
-									id: env.AMO_EXTENSION_ID.trim()
+									id: env.AMO_EXTENSION_ID
 								}
 							};
 						}
