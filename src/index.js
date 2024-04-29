@@ -59,6 +59,10 @@ function getParameters(container, link) {
         return new URL(href).searchParams;
     }
 
+    if (/\/paywall\?/.test(href)) {
+        return new URL(href).searchParams;
+    }
+
     return null;
 }
 
