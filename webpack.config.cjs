@@ -1,7 +1,7 @@
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const package = require('./package.json');
+const pkg = require('./package.json');
 
 module.exports = (env) => ({
 	devtool: 'source-map',
@@ -20,7 +20,8 @@ module.exports = (env) => ({
 					from: 'src/manifest.json',
 					transform(content) {
 						const manifest = JSON.parse(content.toString());
-						manifest.version = package.version;
+						manifest.version = pkg.version;
+						delete manifest.$schema;
 						if (env.AMO_EXTENSION_ID) {
 							manifest.browser_specific_settings = {
 								...manifest.browser_specific_settings,
