@@ -126,18 +126,26 @@ function createUrl(colId, itemId, name, container) {
             const birth = extractFromTable(container, 'Birth');
             if (birth) {
                 const [date, place] = parseEvent(birth);
-                const [year] = /\d{4}/.exec(date);
-                params.append('q.birthLikeDate.from', year);
-                params.append('q.birthLikeDate.to', year);
-                params.append('q.birthLikePlace', place);
+                if (date) {
+                    const [year] = /\d{4}/.exec(date);
+                    params.append('q.birthLikeDate.from', year);
+                    params.append('q.birthLikeDate.to', year);
+                }
+                if (place) {
+                    params.append('q.birthLikePlace', place);
+                }
             }
             const death = extractFromTable(container, 'Death');
             if (death) {
                 const [date, place] = parseEvent(death);
-                const [year] = /\d{4}/.exec(date);
-                params.append('q.deathLikeDate.from', year);
-                params.append('q.deathLikeDate.to', year);
-                params.append('q.deathLikePlace', place);
+                if (date) {
+                    const [year] = /\d{4}/.exec(date);
+                    params.append('q.deathLikeDate.from', year);
+                    params.append('q.deathLikeDate.to', year);
+                } 
+                if (place) {
+                    params.append('q.deathLikePlace', place);
+                }
             }
 
             return `https://www.familysearch.org/search/tree/results?${params}`;
