@@ -22,6 +22,10 @@ describe("parseEvent", () => {
         const str = "Day Month 2021 - Melbourne, Australia";
         deepEqual(parseEvent(str), ["2021", "Melbourne, Australia"]);
     });
+    it("should filter out place if hidden", () => {
+        const str = "Place";
+        deepEqual(parseEvent(str), ["", ""]);
+    });
     it("should not fail on empty", () => {
         const str = "";
         deepEqual(parseEvent(str), ["", ""]);
