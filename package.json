@@ -1,38 +1,42 @@
 {
   "name": "mh-search-assist",
+  "type": "module",
   "version": "0.1.1",
   "description": "A productivity extension for MH",
+  "author": "",
+  "license": "Unlicense",
+  "homepage": "https://github.com/hazzik/mh-search-assist#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hazzik/mh-search-assist.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hazzik/mh-search-assist/issues"
+  },
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "build": "webpack --env AMO_EXTENSION_ID=$AMO_EXTENSION_ID",
     "pack": "web-ext build --source-dir ./dist/",
     "start:firefox": "web-ext run --source-dir ./dist/",
     "sign": "web-ext sign --channel unlisted --source-dir ./dist/ --api-key $AMO_API_KEY --api-secret $AMO_API_SECRET",
     "generate-update-manifest": "node bin/generate-update-manifest.js $AMO_EXTENSION_ID",
-    "test": "mocha 'src/**/*.spec.js'"
+    "test": "mocha 'src/**/*.spec.js'",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hazzik/mh-search-assist.git"
+  "dependencies": {
+    "debounce": "^2.0.0"
   },
-  "author": "",
-  "license": "Unlicense",
-  "bugs": {
-    "url": "https://github.com/hazzik/mh-search-assist/issues"
-  },
-  "homepage": "https://github.com/hazzik/mh-search-assist#readme",
   "devDependencies": {
+    "@antfu/eslint-config": "^2.23.2",
     "copy-webpack-plugin": "^12.0.0",
     "css-loader": "^7.0.0",
     "css-minimizer-webpack-plugin": "^7.0.0",
+    "eslint": "9.5.0",
     "mini-css-extract-plugin": "^2.4.5",
     "mocha": "^10.0.0",
     "web-ext": "^8.0.0",
     "webpack": "^5.65.0",
     "webpack-cli": "^5.0.0"
-  },
-  "dependencies": {
-    "debounce": "^2.0.0"
   }
 }

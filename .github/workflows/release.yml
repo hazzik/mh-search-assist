@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    tags: [ "v*" ]
+    tags: ['v*']
 
 jobs:
   release:
@@ -14,32 +14,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
 
-    - name: Build
-      run: |
-        npm ci
-        npm test
-        npm run build
-        npm run pack
+      - name: Build
+        run: |
+          npm ci
+          npm test
+          npm run build
+          npm run pack
 
-    - name: Sign
-      run: |
-        npm run sign
-        npm run generate-update-manifest
- 
-    - name: Create Release
-      uses: meeDamian/github-release@2.0
-      with:
-        title: "Release ${{ github.ref }}"
-        tag: ${{ github.ref }}
-        token: ${{ secrets.GITHUB_TOKEN }}
-        gzip: false
-        files: >
-          mh-search-assist.zip:web-ext-artifacts/*.zip
-          mh-search-assist.xpi:web-ext-artifacts/*.xpi
-          update.json:web-ext-artifacts/update.json
-          LICENSE.txt:LICENSE
+      - name: Sign
+        run: |
+          npm run sign
+          npm run generate-update-manifest
+
+      - name: Create Release
+        uses: meeDamian/github-release@2.0
+        with:
+          title: 'Release ${{ github.ref }}'
+          tag: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          gzip: false
+          files: >
+            mh-search-assist.zip:web-ext-artifacts/*.zip
+            mh-search-assist.xpi:web-ext-artifacts/*.xpi
+            update.json:web-ext-artifacts/update.json
+            LICENSE.txt:LICENSE

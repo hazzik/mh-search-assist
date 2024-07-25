@@ -17,4 +17,3 @@ Modifies links in the search results to point directly to the found items. Links
 
 ### Mozilla Firefox
 * [Download and install the latest version](https://github.com/hazzik/mh-search-assist/releases/latest/download/mh-search-assist.xpi)
-
