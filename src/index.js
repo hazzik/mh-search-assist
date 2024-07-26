@@ -49,7 +49,7 @@ function getParameters(container, link) {
         return new URL(href).searchParams;
     }
 
-    return null;
+    return;
 }
 
 function extractFromTable(container, field) {
@@ -82,7 +82,7 @@ function createUrl(container, nameSelector) {
             // Geni
             const { firstName, lastName, birthName } = parseName(name);
             if (!firstName && !lastName && !birthName) {
-                return null;
+                return;
             }
  
             const params = new URLSearchParams(`?search_advanced=open&names=${[firstName, lastName, birthName].join(" ")}`);
