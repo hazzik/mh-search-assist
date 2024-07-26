@@ -13,6 +13,6 @@ jobs:
       with:
         node-version: lts/*
 
-    - run: npm ci
-    - run: npm test
-    - run: npm run build
+    - run: yarn install
+    - run: yarn test
+    - run: yarn build
