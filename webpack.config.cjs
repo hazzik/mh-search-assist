@@ -10,7 +10,10 @@ module.exports = (env) => ({
 		main: [
 			'./src/index.js',
 			'./src/index.css'
-		]
+		],
+		request: [
+			'./src/request.js'
+		],
 	},
 	plugins: [
 		new MiniCssExtractPlugin(),
