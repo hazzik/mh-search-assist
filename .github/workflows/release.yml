@@ -21,15 +21,15 @@ jobs:
 
     - name: Build
       run: |
-        npm ci
-        npm test
-        npm run build
-        npm run pack
+        yarn install
+        yarn test
+        yarn build
+        yarn pack
 
     - name: Sign
       run: |
-        npm run sign
-        npm run generate-update-manifest
+        yarn sign
+        yarn generate-update-manifest
  
     - name: Create Release
       uses: meeDamian/github-release@2.0

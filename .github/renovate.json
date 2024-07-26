@@ -5,6 +5,6 @@
     ":preserveSemverRanges"
   ],
   "postUpdateOptions": [
-    "npmDedupe"
+    "yarnDedupeFewer"
   ]
 }
