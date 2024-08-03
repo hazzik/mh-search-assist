@@ -1,6 +1,6 @@
 {
   "name": "mh-search-assist",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A productivity extension for MH",
   "main": "index.js",
   "type": "module",
