@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/hazzik/mh-search-assist#readme",
   "devDependencies": {
-    "copy-webpack-plugin": "^12.0.0",
+    "copy-webpack-plugin": "^13.0.0",
     "css-loader": "^7.0.0",
     "css-minimizer-webpack-plugin": "^7.0.0",
     "mini-css-extract-plugin": "^2.4.5",
