@@ -28,6 +28,6 @@
     "web-ext": "^8.0.0"
   },
   "dependencies": {
-    "debounce": "^2.0.0"
+    "debounce": "^3.0.0"
   }
 }
