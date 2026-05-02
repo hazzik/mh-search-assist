@@ -1,4 +1,5 @@
 
+import "./index.css";
 import debounce from "debounce";
 import { parseEvent } from "./parseEvent.js";
 import { parseName } from "./parseName.js";
