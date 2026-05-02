@@ -27,11 +27,12 @@ function processLinks () {
         container.onclick = (e) => e.stopPropagation();
     });
 
-    document.querySelectorAll(".record_match_action_container .record_match_action_icon.record_match_unconfirmed").forEach(a => {
+    document.querySelectorAll(".record_match_action_container .record_match_action_icon[data-match-id]").forEach(a => {
         const matchId = a.getAttribute("data-match-id");
-        if (a) {
-            a.setAttribute("href", `javascript:recordMatches.recordMatchesList.toggleMatchConfirmationStatus("#${a.id}", "${matchId}")`);
-        }
+        if (!a || !a.id || !matchId) return;
+
+        const escapedMatchId = matchId.replace(/"/g, "\\\"");
+        a.setAttribute("href", `javascript:recordMatches.recordMatchesList.toggleMatchConfirmationStatus(\"#${a.id}\", \"${escapedMatchId}\")`);
     });
 };
 
@@ -70,8 +71,19 @@ function createUrl(container, nameSelector) {
 
     switch (colId) {
         case "1": {
-            const [, siteId, familyTreeId, individualId] = itemId.match(/(\d+)-(\d+)-(\d+)/);
-            return `/person-${(parseInt(familyTreeId) * 1000000 + parseInt(individualId))}_${siteId}_${siteId}/${slug(name)}`;
+            const numericItemIdMatch = itemId.match(/^(\d+)-(\d+)-(\d+)$/);
+            if (numericItemIdMatch) {
+                const [, siteId, familyTreeId, individualId] = numericItemIdMatch;
+                return `/person-${(parseInt(familyTreeId) * 1000000 + parseInt(individualId))}_${siteId}_${siteId}/${slug(name)}`;
+            }
+
+            const alphanumericItemIdMatch = itemId.match(/^([A-Za-z0-9]+)-(\d+)-(\d+)$/);
+            if (alphanumericItemIdMatch) {
+                const [, recordId, siteId, individualId] = alphanumericItemIdMatch;
+                return `/profile-${recordId}-${(parseInt(siteId) * 1000000 + parseInt(individualId))}/${slug(name)}`;
+            }
+
+            return;
         }
         case "2": {
             return `/site-${itemId}/${slug(name)}`;
