@@ -36,26 +36,58 @@ function processLinks () {
     });
 };
 
-function getParameters(container, link) {
-    const cbExtraParameter = container.getAttribute("data-callback-extra-parameter");
-    if (cbExtraParameter) {
-        return new URLSearchParams(cbExtraParameter);
-    }
-    
-    const href = link.href;
-    if (/\/search-plans.php\?/.test(href)) {
-        return new URL(href).searchParams;
-    }
-
-    if (/\/paywall\?/.test(href)) {
-        return new URL(href).searchParams;
-    }
-
-    return;
+function fromSearchParams(params) {
+    const colId = params.get("colId");
+    const itemId = params.get("itemId");
+    return colId && itemId ? { colId, itemId } : undefined;
 }
 
-function extractFromTable(container, field) {
-    return document.evaluate(`.//tr[contains(td, "${field}:")]/td[2]|.//li[contains(span, "${field}")]/span[2]`, container).iterateNext()?.textContent;
+function fromRecordUrl(url) {
+    const [, colId, itemId] = /\/record-(\d+)-([^/?#]+)/.exec(url || "") || [];
+    return colId ? { colId, itemId } : undefined;
+}
+
+function getRecord(container, link) {
+    const cbExtraParameter = container.getAttribute("data-callback-extra-parameter");
+    if (cbExtraParameter) {
+        return fromSearchParams(new URLSearchParams(cbExtraParameter));
+    }
+
+    const href = link.href;
+    if (/\/(?:search-plans\.php|paywall|search-records)\?/.test(href)) {
+        const params = new URL(href).searchParams;
+        // Checkout links no longer carry itemId, the record is only referenced by the returnUrl.
+        return fromSearchParams(params) || fromRecordUrl(params.get("returnUrl"));
+    }
+
+    // Records that are already accessible link straight to the record page.
+    return fromRecordUrl(href);
+}
+
+function getThumbnailUrl(container) {
+    const image = container.querySelector(".recordImageBox img.recordImage");
+    if (image) {
+        return image.getAttribute("src");
+    }
+
+    const thumbnail = container.querySelector(".record_thumbnail");
+    const [, url] = /url\(["']?(.*?)["']?\)/.exec(thumbnail?.style.backgroundImage || "") || [];
+    return url;
+}
+
+function extractEvent(container, field) {
+    const value = document.evaluate(`.//tr[contains(td, "${field}:")]/td[2]|.//li[contains(span, "${field}")]/span[2]`, container).iterateNext();
+    if (!value) return;
+
+    const [date, place] = parseEvent(value.textContent);
+
+    // Locked records obfuscate their values, only the digits survive.
+    if (value.classList?.contains("blurred_value")) {
+        const [year] = /\d{4}/.exec(date) || [];
+        return year ? [year, ""] : undefined;
+    }
+
+    return [date, place];
 }
 
 function createUrl(container, nameSelector) {
@@ -63,11 +95,10 @@ function createUrl(container, nameSelector) {
     if (!link) return;
 
     const name = link.textContent.trim();
-    const params = getParameters(container, link);
-    if (!params) return;
+    const record = getRecord(container, link);
+    if (!record?.itemId) return;
 
-    const colId = params.get("colId");
-    const itemId = params.get("itemId");
+    const { colId, itemId } = record;
 
     switch (colId) {
         case "1": {
@@ -99,20 +130,20 @@ function createUrl(container, nameSelector) {
             }
  
             const params = new URLSearchParams(`?search_advanced=open&names=${[firstName, lastName, birthName].join(" ")}`);
-            const birth = extractFromTable(container, "Birth");
+            const birth = extractEvent(container, "Birth");
             if (birth) {
-                const [date, place] = parseEvent(birth);
-                params.append("birth[year]", date);
-                params.append("birth[location]", place);
+                const [date, place] = birth;
+                if (date) params.append("birth[year]", date);
+                if (place) params.append("birth[location]", place);
             }
 
-            const death = extractFromTable(container, "Death");
+            const death = extractEvent(container, "Death");
             if (death) {
-                const [date, place] = parseEvent(death);
-                params.append("death[year]", date);
-                params.append("death[location]", place);
+                const [date, place] = death;
+                if (date) params.append("death[year]", date);
+                if (place) params.append("death[location]", place);
             }
-            
+
             if (birth || death) {
                 params.append("search_advanced", "open");
             }
@@ -122,12 +153,15 @@ function createUrl(container, nameSelector) {
 
         case "40001": {
             // Family Search
-            const thumbnail = container.querySelector(".recordImageBox img.recordImage")?.getAttribute("src");
+            const thumbnail = getThumbnailUrl(container);
             if (thumbnail?.includes("get-fs-image.php")) {
-                const person = new URL(thumbnail).searchParams.get("person");
-                return `https://www.familysearch.org/tree/person/${person}`;
+                const person = new URL(thumbnail, location.href).searchParams.get("person");
+                if (person) {
+                    return `https://www.familysearch.org/tree/person/${person}`;
+                }
             }
-    
+
+
             const { firstName, lastName, birthName } = parseName(name);
             if (!firstName && !lastName && !birthName) {
                 return;
@@ -143,11 +177,11 @@ function createUrl(container, nameSelector) {
                 params.append("q.surname", surname);
             }
 
-            const birth = extractFromTable(container, "Birth");
+            const birth = extractEvent(container, "Birth");
             if (birth) {
-                const [date, place] = parseEvent(birth);
-                if (date) {
-                    const [year] = /\d{4}/.exec(date);
+                const [date, place] = birth;
+                const [year] = /\d{4}/.exec(date) || [];
+                if (year) {
                     params.append("q.birthLikeDate.from", year);
                     params.append("q.birthLikeDate.to", year);
                 }
@@ -156,14 +190,14 @@ function createUrl(container, nameSelector) {
                 }
             }
 
-            const death = extractFromTable(container, "Death");
+            const death = extractEvent(container, "Death");
             if (death) {
-                const [date, place] = parseEvent(death);
-                if (date) {
-                    const [year] = /\d{4}/.exec(date);
+                const [date, place] = death;
+                const [year] = /\d{4}/.exec(date) || [];
+                if (year) {
                     params.append("q.deathLikeDate.from", year);
                     params.append("q.deathLikeDate.to", year);
-                } 
+                }
                 if (place) {
                     params.append("q.deathLikePlace", place);
                 }
